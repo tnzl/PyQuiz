@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-import Tkinter as tk
+import tkinter as tk
 import json
 import random
-import tkMessageBox
+import tkinter.messagebox as tkMessageBox
 import pkg_resources
 import os
 
@@ -17,21 +17,12 @@ def main(args=None):
 class Application(tk.Frame):
 
     def __init__(self, master=None):
-    	'''
 
+	#'''Call to the constructor when the object is created.
+	#Variables initialized and set the grid as per need.'''
 	
-		Call to the constructor when the object is created.
-		Variables initialized and set the grid as per need.
-	
-
-    	'''
-
-	
-
-
         tkMessageBox.showinfo('Welcome!','Welcome to PyQuiz!\nA quiz built in Python to test your general knowledge.')
         tk.Frame.__init__(self, master)
-        self.flag=0
         self.grid()
         # declaring variables to store question and answer
         self.optionA = tk.StringVar() # control variable for option A
@@ -51,22 +42,22 @@ class Application(tk.Frame):
 
 
     def new_game(self,top):
-	'''
-	When the New Game button from the menu is clicked, the game resets the score to 0 and a new question is loaded.
-	'''
+	#'''
+	#When the New Game button from the menu is clicked, the game resets the score to 0 and a new question is loaded.
+	#'''
         self.load_question(top)
         self.score.set(0)
 
     def about(self):
-	'''
-	Load the About Info Box.
-	'''
+	#'''
+	#Load the About Info Box.
+	#'''
         tkMessageBox.showinfo("About PyQuiz!","Welcome to PyQuiz! v0.3\n PyQuiz is developed to explore Tkinter and then started off as a simple application.\nPyQuiz! is maintained at \nhttps://github.com/abhijitnathwani/PyQuiz/ \n\nYour contributions and suggestions are welcome. Feel free to fork and pull changes to PyQuiz! The application is open-source and is open for development.\n\nPyQuiz is developed and maintained by Abhijit Nathwani. For suggestions and changes, feel free to drop an email:\n abhijit[dot]nathwani[at]gmail[dot]com .\n\nInitial Release: Sept '17.")
 
     def confirm_quit(self):
-	'''
-	Function to confirm quit when the player presses Quit Button. If yes, Quit the application, If no, return to the game.
-	'''
+	#'''
+	#Function to confirm quit when the player presses Quit Button. If yes, Quit the application, If no, return to the game.
+	#'''
         choice = tkMessageBox.askyesno('Quit Application','Are you sure you wish to stop playing PyQuiz! ?')
         if choice == True:
             self.quit()
@@ -74,11 +65,10 @@ class Application(tk.Frame):
             pass
 
     def set_ans(self,answer):
-	'''
-	Function to set the 'selected_answer' variable to the selected option label to compare with correct answer later.
-	Args: answer - gets the option number which calls this function.
-	'''
-
+	#'''
+	#Function to set the 'selected_answer' variable to the selected option label to compare with correct answer later.
+	#Args: answer - gets the option number which calls this function.
+	#'''
         if answer==1:
             self.selected_answer = self.optionA.get()
         elif answer==2:
@@ -88,47 +78,31 @@ class Application(tk.Frame):
         elif answer == 4:
             self.selected_answer = self.optionD.get()
 
-        self.flag=1
-
     def validate_ans(self):
-
-
-    	if self.flag==1:
-    		self.flag=0
-    	else:
-    		self.selected_answer="PY_VAR1"
-	'''
-	Function to validate the selected answer with the correct answer. If they match, increase the score by 5.
-	'''
-
-
-        print "In Validate answer:"
-        if not self.selected_answer:
-            print "No answer selected"
-        else:
-            print "selected:", self.selected_answer
-
-        print "Correct:",self.correct_answer
+	#'''
+	#Function to validate the selected answer with the correct answer. If they match, increase the score by 5.
+	#'''
+        print ("In Validate answer:")
+        print ("selected:",self.selected_answer)
+        print ("Correct:",self.correct_answer)
         self.py_var = ["PY_VAR1","PY_VAR2","PY_VAR3","PY_VAR4"]
         if str(self.selected_answer) == str(self.correct_answer):
             self.score.set(int(self.score.get()) + 5)
-            print "Correct!"
-        elif str(self.selected_answer) in self.py_var:
-            print "IN py var if"
+            print("Correct!")
+        elif str(self.selected_answer) in self.py_var :
+            print("IN py var if")
             pass
         else:
             self.score.set(int(self.score.get()) - 5)
-            print "Incorrect!"
-
-
+            print("Incorrect!")
 	   
 	
 
     def load_question(self,top):
-	'''
-	Function to load a new question set with options. The question is randomly picked from the JSON file for questions.
-	The options to that questions are also randomized and loaded.
-	'''
+	#'''
+	#Function to load a new question set with options. The question is randomly picked from the JSON file for questions.
+	#The options to that questions are also randomized and loaded.
+	#'''
         self.validate_ans() # call to check the answer before loading the next question
         randomindex = random.randint(0,len(self.questions["results"])-1) # generate random index to be picked from list
         if randomindex not in self.question_index: # only proceed if the question has not already been picked up.
@@ -137,10 +111,8 @@ class Application(tk.Frame):
         else:
             randomindex = random.randint(0,len(self.questions["results"])-1)
             self.question_index.append(randomindex)
-            print "Debug:"
-            print self.questions["results"][randomindex]["question"]
-
-        self.selected_answer = ""  # reset selected answer
+            print("Debug:")
+            print(self.questions["results"][randomindex]["question"]) 
         self.correct_answer = self.questions["results"][randomindex]["correct_answer"] # parse the correct answer from JSON file and store it.
         #print self.correct_answer
         self.answers = self.questions["results"][randomindex]["incorrect_answers"] # parse the other incorrect answers
@@ -153,13 +125,16 @@ class Application(tk.Frame):
         self.optionB.set(self.answers.pop(random.randrange(len(self.answers))))
         self.optionC.set(self.answers.pop(random.randrange(len(self.answers))))
         self.optionD.set(self.answers.pop(random.randrange(len(self.answers))))
-        self.radioButtonA.select()	# sets the first radio button as the default
+        self.radioButtonA.deselect()
+        self.radioButtonB.deselect()
+        self.radioButtonC.deselect()
+        self.radioButtonD.deselect()
 	
         
     def createWidgets(self,top):
-	'''
-	Function that creates all the necessary Tkinter widgets. All the widgets are specified here while creation.
-	'''
+	#'''
+	#Function that creates all the necessary Tkinter widgets. All the widgets are specified here while creation.
+	#'''
 	
         top.geometry("800x180")
         top.resizable(True,True)
@@ -229,7 +204,7 @@ class Application(tk.Frame):
         self.quitButton.grid(column=4,row=8)
         self.nextButton.grid(column=3,row=8)
 
-print __name__
+print(__name__)
         
 if __name__ == "__main__":
     main()
